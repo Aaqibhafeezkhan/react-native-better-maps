@@ -68,6 +68,20 @@ final class HybridMapViewDelegate: NSObject, MKMapViewDelegate, UIGestureRecogni
     true
   }
 
+  func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldReceive touch: UITouch
+  ) -> Bool {
+    guard gestureRecognizer is UILongPressGestureRecognizer,
+      let mapView = parent?.view
+    else {
+      return true
+    }
+
+    let point = touch.location(in: mapView)
+    return !isAnnotationView(at: point, in: mapView)
+  }
+
   private func isAnnotationView(at point: CGPoint, in mapView: MKMapView) -> Bool {
     var view: UIView? = mapView.hitTest(point, with: nil)
     while let current = view {
